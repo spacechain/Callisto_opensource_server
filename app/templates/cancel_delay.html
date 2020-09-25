@@ -1,0 +1,32 @@
+{% extends "bootstrap/base.html" %}
+{% block title %}SpaceChain{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="shortcut icon" href="{{ url_for('static', filename = 'icon.png') }}"
+          type="image/x-icon">
+{% endblock %}
+
+{% block navbar %}
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand">SpaceChain</a>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        {{ msg }}
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <p class="bg-warning">{{ message }}</p>
+            </div>
+        {% endfor %}
+        {% block page_content %}{% endblock %}
+
+    </div>
+{% endblock %}

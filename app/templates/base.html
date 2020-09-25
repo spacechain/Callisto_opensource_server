@@ -1,0 +1,51 @@
+<body background="../static/bg.png" style="color: #93a1a1;background-size:100% 100%;background-repeat:no-repeat;">
+
+{% extends "bootstrap/base.html" %}
+{% block title %}SpaceChain{% endblock %}
+
+{% block head %}
+    {{ super() }}
+    <link rel="icon" href="{{ url_for('static', filename = 'icon.png') }}" type="image/x-icon">
+{% endblock %}
+
+{% block navbar %}
+    <div class="navbar navbar-inverse" role="navigation">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="/index">SpaceChain</a>
+            </div>
+            <div class="navbar-collapse collapse">
+                {% block navebaritems %}
+                    <ul class="nav navbar-nav">
+                        <li><a href="/pack_file">Pack files</a></li>
+                        <li><a href="/initialize_server">Initialize the server</a></li>
+                        <li><a href="/auth/logout">Logout</a></li>
+                    </ul>
+                {% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+
+{% block content %}
+    <div class="container">
+        {% for message in get_flashed_messages() %}
+            <div class="alert alert-warning">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                <p class="bg-warning">{{ message }}</p>
+            </div>
+        {% endfor %}
+        {% if m %}
+            <div>
+                <h1>  {{ m }}</h1>
+            </div>
+        {% else %}
+            {% block page_content %}
+                    <h1> Welcome to SpaceChain</h1>
+            {% endblock %}
+        {% endif %}
+    </div>
+{% endblock %}
+
+</body>

@@ -1,0 +1,39 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}SpaceChain{% endblock %}
+
+{% block navebaritems %}
+    <ul class="nav navbar-nav">
+        <li><a href="/auth/register">Sign up</a></li>
+    </ul>
+{% endblock %}
+
+{% block page_content %}
+
+    <h1>Sign in</h1>
+
+    <div id="body_main">
+        <form method="post">
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ wtf.form_field(form.email) }}
+            </div>
+            <div class="form-group">
+                {{ wtf.form_field(form.password) }}
+            </div>
+            <div class="form-inline">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+    </div>
+
+    <style>
+        #body_main {
+            margin: 20px auto;
+            width: 320px;
+            height: 100px;
+        }
+    </style>
+{% endblock %}
+
+

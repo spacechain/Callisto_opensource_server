@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}SpaceChain{% endblock %}
+
+{% block page_content %}
+
+    <h1>Initialize the server</h1>
+
+    <div id="body_main">
+
+        <form method="post">
+            {{ form.csrf_token }}
+            <div class="form-inline">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+
+    </div>
+
+    <style>
+        #body_main {
+            margin: 100px auto;
+            width: 320px;
+            height: 100px;
+        }
+    </style>
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+{% block title %}SpaceChain{% endblock %}
+
+{% block page_content %}
+
+    <h1>Pack files</h1>
+
+    <div class="col-md-4">
+
+        <form method="post">
+
+            {{ form.csrf_token }}
+            <div class="form-group">
+                {{ wtf.form_field(form.otp) }}
+            </div>
+
+            <div class="form-inline">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+
+        </form>
+
+    </div>
+{% endblock %}

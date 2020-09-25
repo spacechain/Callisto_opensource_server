@@ -1,0 +1,139 @@
+{% extends "base.html" %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block title %}SpaceChain{% endblock %}
+
+{% block navebaritems %}
+    <ul class="nav navbar-nav">
+        <li><a href="/auth/login">Sign in</a></li>
+    </ul>
+{% endblock %}
+
+{% block page_content %}
+
+    <script>
+
+        var InterValObj; //timer变量，控制时间
+        var count = 6; //间隔函数，1秒执行
+        var curCount; //当前剩余秒数
+        var code = ""; //验证码
+        var codeLength = 6; //验证码长度
+        function sendMessages() {
+            curCount = count;
+            var email = $("#email").val()
+            if (validateemail(email)) {
+                return;
+            }
+            if (email != "") {
+                //设置button效果，开始计时
+                $("#getCode").attr("disabled", "true");
+                $("#getCode").val("Please enter within " + curCount + " seconds");
+
+                $("#div_send").attr("class", 'form-group');
+                $("#error_message").attr("class", 'help-block hidden');
+                InterValObj = window.setInterval(SetRemainTimes, 1000); //启动计时器，1秒执行一次
+                //向后台发送处理数据
+                $.ajax({
+                    url: "/api_1_0/send_code_by_email/",
+                    dataType: "json",
+                    type: "post",
+                    data: "email=" + email,
+                    success: function (data) {
+                        //保存验证码
+
+                        $("#code").val(data);
+                    },
+                    error: function (data) {
+
+                        $("#div_send").attr("class", 'has-error form-group');
+                        $("#error_message").attr("class", 'help-block visible');
+                        var obj = document.getElementById("error_message");
+                        obj.innerHTML = "Failed to send";
+
+                    }
+
+                });
+            } else {
+                $("#div_send").attr("class", 'has-error form-group');
+                $("#error_message").attr("class", 'help-block visible');
+            }
+        }
+
+        //验证email
+        function validateemail(email) {
+            if (email == '') {
+                {#document.getElementById("error_message").style.display = "visible";#}
+                $("#div_send").attr("class", 'has-error form-group');
+                $("#error_message").attr("class", 'help-block visible');
+                var obj = document.getElementById("error_message");
+                obj.innerHTML = "Please input your email.";
+                return true;
+            }
+            var myreg = /^[0-9a-zA-Z_]{0,19}@[0-9a-zA-Z]{1,13}\.[com,cn,net]{1,3}$/;
+            if (!myreg.test(email)) {
+                $("#div_send").attr("class", 'has-error form-group');
+                $("#error_message").attr("class", 'help-block visible');
+                var obj = document.getElementById("error_message");
+                obj.innerHTML = "Incorrect email address";
+                return true;
+            }
+            return false;
+        }
+
+        //timer处理函数
+        function SetRemainTimes() {
+            if (curCount == 0) {
+                window.clearInterval(InterValObj); //停止计时器
+                $("#getCode").removeAttr("disabled"); //启用按钮
+                $("#getCode").val("Resend");
+
+                code = ""; //清除验证码。
+            } else {
+                curCount--;
+                $("#getCode").val("Please enter within " + curCount + " seconds");
+            }
+        }
+
+    </script>
+
+    <h1>Sign up</h1>
+
+    <div id="body_main">
+
+        <form method="post">
+            {{ form.csrf_token }}
+            <div class="form-group" id="div_send">
+                {{ wtf.form_field(form.email) }}
+                <p id='error_message' class="help-block hidden">Wrong email address</p>
+            </div>
+            <div class="form-group">
+                {{ wtf.form_field(form.verify_code) }}
+            </div>
+            <div class="form-group">
+                {{ wtf.form_field(form.password) }}
+            </div>
+            <div class="form-group">
+                {{ wtf.form_field(form.password_again) }}
+            </div>
+            <div class="form-inline">
+                <input id="getCode" type="button" value="get verification code" onclick="sendMessages()" class="btn btn-primary">
+                {{ form.submit(class="btn btn-primary") }}
+            </div>
+        </form>
+
+    </div>
+
+    <style>
+        #body_main {
+            margin: 20px auto;
+            width: 320px;
+            height: 100px;
+        }
+        #getCode {
+            width: 70%;
+        }
+        #submit {
+            width: 28%;
+        }
+    </style>
+{% endblock %}
