@@ -1,24 +1,22 @@
-# 简介
+# Introduction
 
-此项目是由企业用户部署并使用，用于对钱包用户进行收费和管理，是钱包用户与卫星节点进行沟通的桥梁，钱包用户的SPC-Electrum客户端发起交易时，只有通过企业端服务器加密发送才会被卫星节点进行签名。
+The client server is for corporate users to manage wallets of individual users. The server is also the communication portal between users and SPC payload. When users initiate transactions, the transaction files will be encryted by the client server and sent to SPC payload.
 
 
-# 主要功能
+# Functions
 
-#### 获取卫星公钥
+#### Obtain satellite public keys
+User can create a 2-3 multisignature wallet with Electrum software. Apart from approving a transaction by a user, SPC payload needs to make a second authorization of the transaction with its public key. The satellite public keys are randomly assigned to each corporate user during the wallet registration.
 
-SPC-Electrum客户端是一个2-3的多签钱包，二签需要卫星节点进行签名。企业用户需要在网页上进行操作来获取卫星节点的公钥，这些公钥将在钱包用户的SPC-Electrum客户端创建钱包调用API时随机分发给钱包用户。这样当创建交易时卫星节点便可以进行二签操作。
-关于SPC-Electrum客户端的介绍，参考文档：https://github.com/spacechain/opensource_client
+Please refer to the below document for the introduction of SPC Electrum software：
+https://github.com/spacechain/opensource_client
 
-#### 供SPC-Electrum客户端调用的API
+#### Call API
+The API contains functions for wallet creation, transaction initiation, identity verification. The API are called by corporate user’s Electrum software.
 
-API部分包括创建钱包、创建交易、身份验证等功能API，该部分由钱包用户的SPC-Electrum客户端进行调用。
+#### Encrypt and compress transaction files
+When a wallet user calls API, the first signature signed by the user is stored in the server. Corporate users need to encrypt the transaction details with an OTP. The encrypted transactions are sent to the FTP server and await the second authentication from the SPC payload.
 
-#### 加密压缩交易文件
-
-当钱包用户创建交易调用API后，会将一签信息存入服务器，企业用户需要在网页上输入OTP做为加密秘钥进行压缩。该操作会将目前所有钱包用户的一签信息进行加密压缩，随后发送至FTP服务器等待卫星节点的二签和下发。
-
-#### 拉取并广播卫星二签文件
-
-拉取并广播二签文件是项目内的定时操作，不需要任何人员进行干预，服务器会每隔一段时间操作该步骤，当服务器判断有新的二签文件时，将会下拉二签文件，并进行解密和广播。
+#### Download and broadcast transactions from SPC payload
+SPC server regularly checks for new transactions files that have been authenticated by the SPC payload. These transaction files will be automatically downloaded and broadcasted to the blockchain network.
 
