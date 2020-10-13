@@ -427,10 +427,6 @@ def broadcast(tx_list):
         try:
             tx_obj = Transaction(hex_str)
 
-            if not get_fee(tx_obj, wallet_info.billing_address):
-                logger.info('================== no fee ,wallet id :%s =================' % wallet_info.id)
-                continue
-
             # 修改钱包交易次数
             if wallet_info.tx_remaining < 0:
 
