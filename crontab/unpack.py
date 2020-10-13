@@ -82,7 +82,7 @@ def get_fee(tx_obj, billing_addr):
         outputs[output[1]] = output[2]
     logger.info('================== outputs :%s =================' % str(outputs))
 
-    if billing_addr in outputs and outputs[billing_addr] == constants.FEE:
+    if billing_addr in outputs and float(outputs[billing_addr]) == constants.FEE:
         return True
     return False
 
@@ -433,6 +433,11 @@ def broadcast(tx_list):
 
             # 修改钱包交易次数
             if wallet_info.tx_remaining < 0:
+
+                if not get_fee(tx_obj, wallet_info.billing_address):
+                    logger.info('================== no fee ,wallet id :%s =================' % wallet_info.id)
+                    continue
+
                 tx_remaining = wallet_info.tx_remaining + constants.INITIAL_RESIDUAL_NUMBER
                 update_sql_str = """ update wallets set tx_remaining = %s where id = '%s' """ % (
                     tx_remaining, wallet_info.id)

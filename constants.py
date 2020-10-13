@@ -67,8 +67,8 @@ WALLET_TYPE_SPACECHAIN = 'spacechain'
 DELAYED_PERIOD = 24
 
 # 手续费  及每次手续费验证成功后增加交易次数
-FEE = 0.00100000
-INITIAL_RESIDUAL_NUMBER = 20
+FEE = 100000
+INITIAL_RESIDUAL_NUMBER = 1
 
 # 校验缴费记录地址
 CHECK_FEE_URL = 'https://tbtc.bitaps.com/'
